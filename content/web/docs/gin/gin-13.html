@@ -1,0 +1,621 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>优化你的应用结构和实现 Redis 缓存 - 豆子笔记</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-K98GWB0GBT"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'G-K98GWB0GBT');
+        </script>
+        <!-- Baidu tongji -->
+        <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?50ff5233d3628177a54ce8d9c74e6a92";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+        <meta name="description" content="豆子笔记，记录技术文章和开发经验，包含Rust、Golang、数据库、Web开发、微信小程序、Linux以及开发环境等内容。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../../favicon.svg">
+        <link rel="shortcut icon" href="../../../favicon.png">
+        <link rel="stylesheet" href="../../../css/variables.css">
+        <link rel="stylesheet" href="../../../css/general.css">
+        <link rel="stylesheet" href="../../../css/chrome.css">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../../highlight.css">
+        <link rel="stylesheet" href="../../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../../index.html">说明</a></li><li class="chapter-item affix "><li class="spacer"></li><li class="chapter-item affix "><li class="part-title">豆子笔记</li><li class="chapter-item "><a href="../../../flags/index.html"><strong aria-hidden="true">1.</strong> 动态</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../flags/2024.html"><strong aria-hidden="true">1.1.</strong> 2024 年</a></li><li class="chapter-item "><a href="../../../flags/2025.html"><strong aria-hidden="true">1.2.</strong> 2025 年</a></li></ol></li><li class="chapter-item expanded "><a href="../../../web/docs/index.html"><strong aria-hidden="true">2.</strong> 教程</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../web/docs/gojc/index.html"><strong aria-hidden="true">2.1.</strong> Go 基础教程</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../web/docs/gojc/packages.html"><strong aria-hidden="true">2.1.1.</strong> 包</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/go-imports.html"><strong aria-hidden="true">2.1.2.</strong> 包导入</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/exported-names.html"><strong aria-hidden="true">2.1.3.</strong> 导出名</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/functions.html"><strong aria-hidden="true">2.1.4.</strong> 函数</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/functions-continued.html"><strong aria-hidden="true">2.1.5.</strong> 函数类型简写</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/multiple-results.html"><strong aria-hidden="true">2.1.6.</strong> 函数多返回值</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/named-results.html"><strong aria-hidden="true">2.1.7.</strong> 函数命名返回值</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/variables.html"><strong aria-hidden="true">2.1.8.</strong> 变量</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/variables-with-initializers.html"><strong aria-hidden="true">2.1.9.</strong> 变量初始化</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/short-variable-declarations.html"><strong aria-hidden="true">2.1.10.</strong> 短变量</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/basic-type.html"><strong aria-hidden="true">2.1.11.</strong> 基本类型</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/type-conversions.html"><strong aria-hidden="true">2.1.12.</strong> 类型转换</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/type-inference.html"><strong aria-hidden="true">2.1.13.</strong> 类型推断</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/constants.html"><strong aria-hidden="true">2.1.14.</strong> 常量</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/numeric-constants.html"><strong aria-hidden="true">2.1.15.</strong> 数值变量</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/go-for.html"><strong aria-hidden="true">2.1.16.</strong> FOR 循环</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/for-continued.html"><strong aria-hidden="true">2.1.17.</strong> FOR 循环简化</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/for-is-gos-while.html"><strong aria-hidden="true">2.1.18.</strong> FOR-While</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/forever.html"><strong aria-hidden="true">2.1.19.</strong> 无限循环</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/go-if.html"><strong aria-hidden="true">2.1.20.</strong> IF 判断</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/if-with-a-short-statement.html"><strong aria-hidden="true">2.1.21.</strong> IF 判断简化</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/if-and-else.html"><strong aria-hidden="true">2.1.22.</strong> IF 和 ELSE</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/go-switch.html"><strong aria-hidden="true">2.1.23.</strong> SWITCH 分支</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/switch-evaluation-order.html"><strong aria-hidden="true">2.1.24.</strong> SWITCH 求值顺序</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/switch-with-no-condition.html"><strong aria-hidden="true">2.1.25.</strong> 无条件 SWITCH</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/go-defer.html"><strong aria-hidden="true">2.1.26.</strong> defer</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/defer-multi.html"><strong aria-hidden="true">2.1.27.</strong> defer 栈</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/pointers.html"><strong aria-hidden="true">2.1.28.</strong> 指针</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/structs.html"><strong aria-hidden="true">2.1.29.</strong> 结构体</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/struct-fields.html"><strong aria-hidden="true">2.1.30.</strong> 结构体字段</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/struct-pointers.html"><strong aria-hidden="true">2.1.31.</strong> 结构体指针</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/struct-literals.html"><strong aria-hidden="true">2.1.32.</strong> 结构体字面量</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/go-array.html"><strong aria-hidden="true">2.1.33.</strong> 数组</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/slices.html"><strong aria-hidden="true">2.1.34.</strong> 切片</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/slices-pointers.html"><strong aria-hidden="true">2.1.35.</strong> 切片底层</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/slice-literals.html"><strong aria-hidden="true">2.1.36.</strong> 切片字面量</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/slice-bounds.html"><strong aria-hidden="true">2.1.37.</strong> 切片边界</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/slice-len-cap.html"><strong aria-hidden="true">2.1.38.</strong> 切片长度和容量</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/nil-slices.html"><strong aria-hidden="true">2.1.39.</strong> nil 切片</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/making-slices.html"><strong aria-hidden="true">2.1.40.</strong> make 创建切片</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/slices-of-slice.html"><strong aria-hidden="true">2.1.41.</strong> 切片的切片</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/append.html"><strong aria-hidden="true">2.1.42.</strong> 切片添加元素</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/range.html"><strong aria-hidden="true">2.1.43.</strong> range 遍历切片</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/range-continued.html"><strong aria-hidden="true">2.1.44.</strong> range 遍历切片续</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/go-maps.html"><strong aria-hidden="true">2.1.45.</strong> map</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/map-literals.html"><strong aria-hidden="true">2.1.46.</strong> map 字面量</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/map-literals-continued.html"><strong aria-hidden="true">2.1.47.</strong> map 字面量续</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/mutating-maps.html"><strong aria-hidden="true">2.1.48.</strong> 修改 map</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/function-values.html"><strong aria-hidden="true">2.1.49.</strong> 函数值</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/function-closures.html"><strong aria-hidden="true">2.1.50.</strong> 函数闭包</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/methods.html"><strong aria-hidden="true">2.1.51.</strong> 方法</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/methods-funcs.html"><strong aria-hidden="true">2.1.52.</strong> 方法函数</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/methods-continued.html"><strong aria-hidden="true">2.1.53.</strong> 方法续</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/methods-pointers.html"><strong aria-hidden="true">2.1.54.</strong> 方法指针类型</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/methods-pointers-explained.html"><strong aria-hidden="true">2.1.55.</strong> 指针与函数</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/indirection.html"><strong aria-hidden="true">2.1.56.</strong> 方法与指针重定向</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/indirection-values.html"><strong aria-hidden="true">2.1.57.</strong> 方法与指针重定向续</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/methods-with-pointer-receivers.html"><strong aria-hidden="true">2.1.58.</strong> 方法接收者</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/interfaces.html"><strong aria-hidden="true">2.1.59.</strong> 接口</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/interfaces-are-satisfied-implicitly.html"><strong aria-hidden="true">2.1.60.</strong> 接口实现</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/interface-values.html"><strong aria-hidden="true">2.1.61.</strong> 接口值</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/interface-values-with-nil.html"><strong aria-hidden="true">2.1.62.</strong> 接口值续</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/nil-interface-values.html"><strong aria-hidden="true">2.1.63.</strong> nil 接口值</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/empty-interface.html"><strong aria-hidden="true">2.1.64.</strong> 空接口</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/type-assertions.html"><strong aria-hidden="true">2.1.65.</strong> 类型断言</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/type-switches.html"><strong aria-hidden="true">2.1.66.</strong> 类型选择</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/stringer.html"><strong aria-hidden="true">2.1.67.</strong> Stringer</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/errors.html"><strong aria-hidden="true">2.1.68.</strong> error</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/reader.html"><strong aria-hidden="true">2.1.69.</strong> Readers</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/go-images.html"><strong aria-hidden="true">2.1.70.</strong> image</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/generic-index.html"><strong aria-hidden="true">2.1.71.</strong> 类型参数</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/generic-list.html"><strong aria-hidden="true">2.1.72.</strong> 泛型类型</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/goroutines.html"><strong aria-hidden="true">2.1.73.</strong> Go 协程</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/channels.html"><strong aria-hidden="true">2.1.74.</strong> Go 信道</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/buffered-channels.html"><strong aria-hidden="true">2.1.75.</strong> 缓冲信道</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/range-and-close.html"><strong aria-hidden="true">2.1.76.</strong> range 和 close</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/select.html"><strong aria-hidden="true">2.1.77.</strong> Go select</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/default-selection.html"><strong aria-hidden="true">2.1.78.</strong> select 默认</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/mutex-counter.html"><strong aria-hidden="true">2.1.79.</strong> mutex 锁</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/exercise-web-crawler.html"><strong aria-hidden="true">2.1.80.</strong> Web 爬虫</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-archive.html"><strong aria-hidden="true">2.1.81.</strong> 压缩包</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-bufio.html"><strong aria-hidden="true">2.1.82.</strong> bufio</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-builtin.html"><strong aria-hidden="true">2.1.83.</strong> builtin</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-bytes.html"><strong aria-hidden="true">2.1.84.</strong> bytes</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-compress.html"><strong aria-hidden="true">2.1.85.</strong> compress</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-container.html"><strong aria-hidden="true">2.1.86.</strong> container</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-context.html"><strong aria-hidden="true">2.1.87.</strong> context</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-crypto.html"><strong aria-hidden="true">2.1.88.</strong> crypto</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-database.html"><strong aria-hidden="true">2.1.89.</strong> database</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-encoding.html"><strong aria-hidden="true">2.1.90.</strong> encoding</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-flag.html"><strong aria-hidden="true">2.1.91.</strong> flag</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-fmt.html"><strong aria-hidden="true">2.1.92.</strong> fmt</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-hash.html"><strong aria-hidden="true">2.1.93.</strong> hash</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-html.html"><strong aria-hidden="true">2.1.94.</strong> html</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-image.html"><strong aria-hidden="true">2.1.95.</strong> image</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-index.html"><strong aria-hidden="true">2.1.96.</strong> index</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-io.html"><strong aria-hidden="true">2.1.97.</strong> io</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-log.html"><strong aria-hidden="true">2.1.98.</strong> log</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-math.html"><strong aria-hidden="true">2.1.99.</strong> math</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-net.html"><strong aria-hidden="true">2.1.100.</strong> net</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-os.html"><strong aria-hidden="true">2.1.101.</strong> os</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-path.html"><strong aria-hidden="true">2.1.102.</strong> path</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-regexp.html"><strong aria-hidden="true">2.1.103.</strong> regexp</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-runtime.html"><strong aria-hidden="true">2.1.104.</strong> runtime</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-sort.html"><strong aria-hidden="true">2.1.105.</strong> sort</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-strconv.html"><strong aria-hidden="true">2.1.106.</strong> strconv</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-strings.html"><strong aria-hidden="true">2.1.107.</strong> strings</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-sync.html"><strong aria-hidden="true">2.1.108.</strong> sync</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-text.html"><strong aria-hidden="true">2.1.109.</strong> text</a></li><li class="chapter-item "><a href="../../../web/docs/gojc/package-time.html"><strong aria-hidden="true">2.1.110.</strong> time</a></li></ol></li><li class="chapter-item expanded "><a href="../../../web/docs/gin/index.html"><strong aria-hidden="true">2.2.</strong> Gin 教程</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../web/docs/gin/gin-01.html"><strong aria-hidden="true">2.2.1.</strong> Gin 介绍</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-02.html"><strong aria-hidden="true">2.2.2.</strong> 搭建 Blog API's</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-03.html"><strong aria-hidden="true">2.2.3.</strong> 编写 Tag 的 API's、Models</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-04.html"><strong aria-hidden="true">2.2.4.</strong> 编写 Article 的 API's、Models</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-05.html"><strong aria-hidden="true">2.2.5.</strong> 使用 JWT 进行身份校验</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-06.html"><strong aria-hidden="true">2.2.6.</strong>  编写一个简单的文件日志</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-07.html"><strong aria-hidden="true">2.2.7.</strong> 优雅的重启服务</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-08.html"><strong aria-hidden="true">2.2.8.</strong> 为它加上 Swagger</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-09.html"><strong aria-hidden="true">2.2.9.</strong> 将 Golang 应用部署到 Docker</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-10.html"><strong aria-hidden="true">2.2.10.</strong> 定制 GORM Callbacks</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-11.html"><strong aria-hidden="true">2.2.11.</strong> Cron 定时任务</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-12.html"><strong aria-hidden="true">2.2.12.</strong> 优化配置结构及实现图片上传</a></li><li class="chapter-item expanded "><a href="../../../web/docs/gin/gin-13.html" class="active"><strong aria-hidden="true">2.2.13.</strong> 优化你的应用结构和实现 Redis 缓存</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-14.html"><strong aria-hidden="true">2.2.14.</strong> 实现导出、导入 Excel</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-15.html"><strong aria-hidden="true">2.2.15.</strong> 生成二维码、合并海报</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-16.html"><strong aria-hidden="true">2.2.16.</strong> 在图片上绘制文字</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-17.html"><strong aria-hidden="true">2.2.17.</strong> Nginx 部署 Go 应用</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-18.html"><strong aria-hidden="true">2.2.18.</strong> Golang 交叉编译</a></li><li class="chapter-item "><a href="../../../web/docs/gin/gin-19.html"><strong aria-hidden="true">2.2.19.</strong> 番外 请入门 Makefile</a></li></ol></li><li class="chapter-item "><a href="../../../web/docs/rsjc/index.html"><strong aria-hidden="true">2.3.</strong> Rust 基础教程</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../web/docs/rsjc/rs1.html"><strong aria-hidden="true">2.3.1.</strong> 基础类型</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs2.html"><strong aria-hidden="true">2.3.2.</strong> 字面量和运算符</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs3.html"><strong aria-hidden="true">2.3.3.</strong> 元组</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs4.html"><strong aria-hidden="true">2.3.4.</strong> 数组和切片</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs5.html"><strong aria-hidden="true">2.3.5.</strong> 结构体</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs6.html"><strong aria-hidden="true">2.3.6.</strong> 枚举</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs7.html"><strong aria-hidden="true">2.3.7.</strong> 常量</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs8.html"><strong aria-hidden="true">2.3.8.</strong> 变量绑定</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs9.html"><strong aria-hidden="true">2.3.9.</strong> 类型系统</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs10.html"><strong aria-hidden="true">2.3.10.</strong> 类型转换</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs11.html"><strong aria-hidden="true">2.3.11.</strong> 表达式</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs12.html"><strong aria-hidden="true">2.3.12.</strong> 流程控制 IF</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs13.html"><strong aria-hidden="true">2.3.13.</strong> 流程控制 loop</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs14.html"><strong aria-hidden="true">2.3.14.</strong> 流程控制 while</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs15.html"><strong aria-hidden="true">2.3.15.</strong> 流程控制 for</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs16.html"><strong aria-hidden="true">2.3.16.</strong> 流程控制 match</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs17.html"><strong aria-hidden="true">2.3.17.</strong> 函数</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs18.html"><strong aria-hidden="true">2.3.18.</strong> 方法</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs19.html"><strong aria-hidden="true">2.3.19.</strong> 闭包</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs20.html"><strong aria-hidden="true">2.3.20.</strong> 模块</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs21.html"><strong aria-hidden="true">2.3.21.</strong> Crate</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs22.html"><strong aria-hidden="true">2.3.22.</strong> Cargo</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs23.html"><strong aria-hidden="true">2.3.23.</strong> 属性</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs24.html"><strong aria-hidden="true">2.3.24.</strong> 泛型</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs25.html"><strong aria-hidden="true">2.3.25.</strong> 泛型函数</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs26.html"><strong aria-hidden="true">2.3.26.</strong> 泛型实现</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs27.html"><strong aria-hidden="true">2.3.27.</strong> 泛型 trait</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs28.html"><strong aria-hidden="true">2.3.28.</strong> 泛型约束</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs29.html"><strong aria-hidden="true">2.3.29.</strong> NewType</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs30.html"><strong aria-hidden="true">2.3.30.</strong> 关联项</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs31.html"><strong aria-hidden="true">2.3.31.</strong> 虚类型参数</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs32.html"><strong aria-hidden="true">2.3.32.</strong> 作用域规则</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs33.html"><strong aria-hidden="true">2.3.33.</strong> 所有权和移动</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs34.html"><strong aria-hidden="true">2.3.34.</strong> 借用</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs35.html"><strong aria-hidden="true">2.3.35.</strong> 生命周期</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs36.html"><strong aria-hidden="true">2.3.36.</strong> trait</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs37.html"><strong aria-hidden="true">2.3.37.</strong> trait 派生</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs38.html"><strong aria-hidden="true">2.3.38.</strong> 返回 trait</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs39.html"><strong aria-hidden="true">2.3.39.</strong> 运算符重载</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs40.html"><strong aria-hidden="true">2.3.40.</strong> trait Drop</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs41.html"><strong aria-hidden="true">2.3.41.</strong> trait Iterator</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs42.html"><strong aria-hidden="true">2.3.42.</strong> impl Trait</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs43.html"><strong aria-hidden="true">2.3.43.</strong> trait Clone</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs44.html"><strong aria-hidden="true">2.3.44.</strong> 父 trait</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs45.html"><strong aria-hidden="true">2.3.45.</strong> trait 消除重叠</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs46.html"><strong aria-hidden="true">2.3.46.</strong> 宏语法</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs47.html"><strong aria-hidden="true">2.3.47.</strong> 宏功能</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs48.html"><strong aria-hidden="true">2.3.48.</strong> 错误处理</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs49.html"><strong aria-hidden="true">2.3.49.</strong> Option</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs50.html"><strong aria-hidden="true">2.3.50.</strong> Result</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs51.html"><strong aria-hidden="true">2.3.51.</strong> 处理更多错误</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs52.html"><strong aria-hidden="true">2.3.52.</strong> Box、堆栈</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs53.html"><strong aria-hidden="true">2.3.53.</strong> 动态数组</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs54.html"><strong aria-hidden="true">2.3.54.</strong> 字符串</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs55.html"><strong aria-hidden="true">2.3.55.</strong> 选项 Option</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs56.html"><strong aria-hidden="true">2.3.56.</strong> 结果 Result</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs57.html"><strong aria-hidden="true">2.3.57.</strong> 散列表 HashMap</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs58.html"><strong aria-hidden="true">2.3.58.</strong> 引用计数 Rc</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs59.html"><strong aria-hidden="true">2.3.59.</strong> 共享引用计数 Arc</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs60.html"><strong aria-hidden="true">2.3.60.</strong> 崩溃 panic!</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs61.html"><strong aria-hidden="true">2.3.61.</strong> 线程</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs62.html"><strong aria-hidden="true">2.3.62.</strong> 通道</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs63.html"><strong aria-hidden="true">2.3.63.</strong> 路径</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs64.html"><strong aria-hidden="true">2.3.64.</strong> 文件</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs65.html"><strong aria-hidden="true">2.3.65.</strong> 子进程</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs66.html"><strong aria-hidden="true">2.3.66.</strong> 命令行参数</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs67.html"><strong aria-hidden="true">2.3.67.</strong> 外部语言函数接口</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs68.html"><strong aria-hidden="true">2.3.68.</strong> 单元测试</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs69.html"><strong aria-hidden="true">2.3.69.</strong> 文档测试</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs70.html"><strong aria-hidden="true">2.3.70.</strong> 集成测试</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs71.html"><strong aria-hidden="true">2.3.71.</strong> 不安全操作</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs72.html"><strong aria-hidden="true">2.3.72.</strong> 兼容性</a></li><li class="chapter-item "><a href="../../../web/docs/rsjc/rs73.html"><strong aria-hidden="true">2.3.73.</strong> 文档</a></li></ol></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_1-1.html"><strong aria-hidden="true">2.4.</strong> 小程序基础教程</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_1-2.html"><strong aria-hidden="true">2.4.1.</strong> 小程序与网页</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_1-3.html"><strong aria-hidden="true">2.4.2.</strong> 小程序体验</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_2-1.html"><strong aria-hidden="true">2.4.3.</strong> 代码构成</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_2-2.html"><strong aria-hidden="true">2.4.4.</strong> JSON 配置</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_2-3.html"><strong aria-hidden="true">2.4.5.</strong> WXML 模板</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_2-4.html"><strong aria-hidden="true">2.4.6.</strong> WXSS 样式</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_2-5.html"><strong aria-hidden="true">2.4.7.</strong> WXML 语法</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_2-6.html"><strong aria-hidden="true">2.4.8.</strong> WXS 语法</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_2-7.html"><strong aria-hidden="true">2.4.9.</strong> Javascript 脚本</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_3-1.html"><strong aria-hidden="true">2.4.10.</strong> 视图容器</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_3-2.html"><strong aria-hidden="true">2.4.11.</strong> 基础内容</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_3-3.html"><strong aria-hidden="true">2.4.12.</strong> 表单组件</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_3-4.html"><strong aria-hidden="true">2.4.13.</strong> 导航</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_3-5.html"><strong aria-hidden="true">2.4.14.</strong> 媒体组件</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_3-6.html"><strong aria-hidden="true">2.4.15.</strong> 地图</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_3-7.html"><strong aria-hidden="true">2.4.16.</strong> 画布</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_3-8.html"><strong aria-hidden="true">2.4.17.</strong> 开放能力</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_4-1.html"><strong aria-hidden="true">2.4.18.</strong> 云开发</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_4-2.html"><strong aria-hidden="true">2.4.19.</strong> 云数据库</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_4-3.html"><strong aria-hidden="true">2.4.20.</strong> 云存储</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_4-4.html"><strong aria-hidden="true">2.4.21.</strong> 云函数</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/mp_4-5.html"><strong aria-hidden="true">2.4.22.</strong> 云调用</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/wasm-type.html"><strong aria-hidden="true">2.4.23.</strong> WASM 基本类型</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/wasm-memory.html"><strong aria-hidden="true">2.4.24.</strong> WASM 线性内存</a></li><li class="chapter-item "><a href="../../../web/docs/mpjc/wasm-table.html"><strong aria-hidden="true">2.4.25.</strong> WASM 表格</a></li></ol></li></ol></li><li class="chapter-item "><a href="../../../mp/content/index.html"><strong aria-hidden="true">3.</strong> 知识点</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../mp/content/projects/index.html"><strong aria-hidden="true">3.1.</strong> 我的项目</a></li><li class="chapter-item "><a href="../../../mp/content/databases/index.html"><strong aria-hidden="true">3.2.</strong> 数据库</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../mp/content/databases/mongo.html"><strong aria-hidden="true">3.2.1.</strong> mongo</a></li><li class="chapter-item "><a href="../../../mp/content/databases/redis.html"><strong aria-hidden="true">3.2.2.</strong> redis</a></li><li class="chapter-item "><a href="../../../mp/content/databases/mysql.html"><strong aria-hidden="true">3.2.3.</strong> mysql</a></li><li class="chapter-item "><a href="../../../mp/content/databases/sqlite3.html"><strong aria-hidden="true">3.2.4.</strong> sqlite3</a></li><li class="chapter-item "><a href="../../../mp/content/databases/minio.html"><strong aria-hidden="true">3.2.5.</strong> minio</a></li><li class="chapter-item "><a href="../../../mp/content/databases/postgresql.html"><strong aria-hidden="true">3.2.6.</strong> postgresql</a></li></ol></li><li class="chapter-item "><a href="../../../mp/content/languages/index.html"><strong aria-hidden="true">3.3.</strong> 编程语言</a></li><li class="chapter-item "><a href="../../../mp/content/protocols/index.html"><strong aria-hidden="true">3.4.</strong> 网络协议</a></li><li class="chapter-item "><a href="../../../mp/content/libs/index.html"><strong aria-hidden="true">3.5.</strong> 常用库</a></li><li class="chapter-item "><a href="../../../mp/content/tools/index.html"><strong aria-hidden="true">3.6.</strong> 工具</a></li></ol></li><li class="chapter-item "><a href="../../../projects/index.html"><strong aria-hidden="true">4.</strong> 项目实战</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../projects/visit/index.html"><strong aria-hidden="true">4.1.</strong> 豆子碎片项目</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../projects/visit/ch1.html"><strong aria-hidden="true">4.1.1.</strong> 启动项目</a></li><li class="chapter-item "><a href="../../../projects/visit/ch2.html"><strong aria-hidden="true">4.1.2.</strong> 完成首页页面</a></li><li class="chapter-item "><a href="../../../projects/visit/ch3.html"><strong aria-hidden="true">4.1.3.</strong> 首页数据交互</a></li><li class="chapter-item "><a href="../../../projects/visit/ch4.html"><strong aria-hidden="true">4.1.4.</strong> 网络请求后台数据</a></li><li class="chapter-item "><a href="../../../projects/visit/ch5.html"><strong aria-hidden="true">4.1.5.</strong> 解析 Markdown 数据</a></li><li class="chapter-item "><a href="../../../projects/visit/ch6.html"><strong aria-hidden="true">4.1.6.</strong> 用户识别码</a></li><li class="chapter-item "><a href="../../../projects/visit/ch7.html"><strong aria-hidden="true">4.1.7.</strong> 集成广告</a></li></ol></li><li class="chapter-item "><a href="../../../projects/gupart/index.html"><strong aria-hidden="true">4.2.</strong> Golang 上传文章工具</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../projects/gupart/ch1.html"><strong aria-hidden="true">4.2.1.</strong> 命令行工具</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch2.html"><strong aria-hidden="true">4.2.2.</strong> 添加更多命令</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch3.html"><strong aria-hidden="true">4.2.3.</strong> 上传文章</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch4.html"><strong aria-hidden="true">4.2.4.</strong> 查询文章</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch5.html"><strong aria-hidden="true">4.2.5.</strong> 删除文章</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch6.html"><strong aria-hidden="true">4.2.6.</strong> 更新文章标题</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch7.html"><strong aria-hidden="true">4.2.7.</strong> 更新文章关键字</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch8.html"><strong aria-hidden="true">4.2.8.</strong> 更新文章内容</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch9.html"><strong aria-hidden="true">4.2.9.</strong> 是否将文章公开？</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch10.html"><strong aria-hidden="true">4.2.10.</strong> 是否将文章加锁？</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch11.html"><strong aria-hidden="true">4.2.11.</strong> 如何多个命令共用一个接口？</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch12.html"><strong aria-hidden="true">4.2.12.</strong> 强制更新文章公开</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch13.html"><strong aria-hidden="true">4.2.13.</strong> 如何获取有效城市？</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch14.html"><strong aria-hidden="true">4.2.14.</strong> 如何限制文章同城访问？</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch15.html"><strong aria-hidden="true">4.2.15.</strong> 如何上传豆子碎片文章？</a></li><li class="chapter-item "><a href="../../../projects/gupart/ch16.html"><strong aria-hidden="true">4.2.16.</strong> 如何更新维护豆子碎片文章？</a></li></ol></li><li class="chapter-item "><a href="../../../projects/rupart/index.html"><strong aria-hidden="true">4.3.</strong> Rust 上传文章工具</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../projects/rupart/intro.html"><strong aria-hidden="true">4.3.1.</strong> 项目介绍</a></li></ol></li><li class="chapter-item "><a href="../../../projects/wander/index.html"><strong aria-hidden="true">4.4.</strong> 豆子工具项目</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../projects/wander/intro.html"><strong aria-hidden="true">4.4.1.</strong> 启动项目</a></li><li class="chapter-item "><a href="../../../projects/wander/home.html"><strong aria-hidden="true">4.4.2.</strong> 完成首页页面</a></li><li class="chapter-item "><a href="../../../projects/wander/winfo.html"><strong aria-hidden="true">4.4.3.</strong> 功能列表状态</a></li><li class="chapter-item "><a href="../../../projects/wander/getmypubip.html"><strong aria-hidden="true">4.4.4.</strong> 获取本机公网 IP</a></li><li class="chapter-item "><a href="../../../projects/wander/ipterritory.html"><strong aria-hidden="true">4.4.5.</strong> IP 地址查询</a></li><li class="chapter-item "><a href="../../../projects/wander/av2mp3.html"><strong aria-hidden="true">4.4.6.</strong> 音频格式转换</a></li><li class="chapter-item "><a href="../../../projects/wander/img2webp.html"><strong aria-hidden="true">4.4.7.</strong> 图片格式转换</a></li><li class="chapter-item "><a href="../../../projects/wander/mobileterritory.html"><strong aria-hidden="true">4.4.8.</strong> 查手机号归属地</a></li><li class="chapter-item "><a href="../../../projects/wander/genrandfile.html"><strong aria-hidden="true">4.4.9.</strong> 生成随机编号文件</a></li><li class="chapter-item "><a href="../../../projects/wander/loctransfile.html"><strong aria-hidden="true">4.4.10.</strong> 局域网传输文件</a></li><li class="chapter-item "><a href="../../../projects/wander/locslicefile.html"><strong aria-hidden="true">4.4.11.</strong> 本地分块传输文件</a></li><li class="chapter-item "><a href="../../../projects/wander/colorconvert.html"><strong aria-hidden="true">4.4.12.</strong> 颜色值转换</a></li><li class="chapter-item "><a href="../../../projects/wander/gif2webp.html"><strong aria-hidden="true">4.4.13.</strong> Gif 动画转 WebP</a></li><li class="chapter-item "><a href="../../../projects/wander/chkservport.html"><strong aria-hidden="true">4.4.14.</strong> 检查服务端口</a></li><li class="chapter-item "><a href="../../../projects/wander/geticode.html"><strong aria-hidden="true">4.4.15.</strong> 获取识别码</a></li><li class="chapter-item "><a href="../../../projects/wander/getvcode.html"><strong aria-hidden="true">4.4.16.</strong> 获取验证码</a></li><li class="chapter-item "><a href="../../../projects/wander/getast.html"><strong aria-hidden="true">4.4.17.</strong> 获取 AST 账户</a></li><li class="chapter-item "><a href="../../../projects/wander/getlocip.html"><strong aria-hidden="true">4.4.18.</strong> 获取本机本地 IP</a></li><li class="chapter-item "><a href="../../../projects/wander/getnetprint.html"><strong aria-hidden="true">4.4.19.</strong> 查找网络打印机</a></li><li class="chapter-item "><a href="../../../projects/wander/getqrcodecontent.html"><strong aria-hidden="true">4.4.20.</strong> 二维码内容识别</a></li><li class="chapter-item "><a href="../../../projects/wander/jumpmp.html"><strong aria-hidden="true">4.4.21.</strong> 跳转小程序</a></li><li class="chapter-item "><a href="../../../projects/wander/locdnfile.html"><strong aria-hidden="true">4.4.22.</strong> 调试本地下载服务</a></li><li class="chapter-item "><a href="../../../projects/wander/locupfile.html"><strong aria-hidden="true">4.4.23.</strong> 调试本地上传服务</a></li><li class="chapter-item "><a href="../../../projects/wander/lochttp.html"><strong aria-hidden="true">4.4.24.</strong> 调试本地 HTTP 请求</a></li><li class="chapter-item "><a href="../../../projects/wander/loctcp.html"><strong aria-hidden="true">4.4.25.</strong> 调试本地 TCP 服务</a></li><li class="chapter-item "><a href="../../../projects/wander/locudp.html"><strong aria-hidden="true">4.4.26.</strong> 调试本地 UDP 服务</a></li><li class="chapter-item "><a href="../../../projects/wander/locwebsocket.html"><strong aria-hidden="true">4.4.27.</strong> 调试本地 Websocket 服务</a></li><li class="chapter-item "><a href="../../../projects/wander/md5hash.html"><strong aria-hidden="true">4.4.28.</strong> MD5 哈希加密</a></li><li class="chapter-item "><a href="../../../projects/wander/tsconvert.html"><strong aria-hidden="true">4.4.29.</strong> 时间戳日期转换</a></li><li class="chapter-item "><a href="../../../projects/wander/turnwheel.html"><strong aria-hidden="true">4.4.30.</strong> 九宫格大转盘</a></li><li class="chapter-item "><a href="../../../projects/wander/urlcode.html"><strong aria-hidden="true">4.4.31.</strong> URL 编解码</a></li><li class="chapter-item "><a href="../../../projects/wander/watchad.html"><strong aria-hidden="true">4.4.32.</strong> 观看激励广告</a></li></ol></li><li class="chapter-item "><a href="../../../projects/vcode/index.html"><strong aria-hidden="true">4.5.</strong> 自助语音验证码项目</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../projects/vcode/intro.html"><strong aria-hidden="true">4.5.1.</strong> 使用说明</a></li><li class="chapter-item "><a href="../../../projects/vcode/implast.html"><strong aria-hidden="true">4.5.2.</strong> 如何实现自助验证码？</a></li><li class="chapter-item "><a href="../../../projects/vcode/audio.html"><strong aria-hidden="true">4.5.3.</strong> 音频文件处理</a></li><li class="chapter-item "><a href="../../../projects/vcode/sipsqlite3.html"><strong aria-hidden="true">4.5.4.</strong> 配置实时数据库</a></li><li class="chapter-item "><a href="../../../projects/vcode/agidemo.html"><strong aria-hidden="true">4.5.5.</strong> Asterisk AGI 调用</a></li><li class="chapter-item "><a href="../../../projects/vcode/errors.html"><strong aria-hidden="true">4.5.6.</strong> Asterisk 常见错误</a></li></ol></li><li class="chapter-item "><a href="../../../projects/mqtt/index.html"><strong aria-hidden="true">4.6.</strong> MQTT 消息通知</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../projects/mqtt/mosquitto.html"><strong aria-hidden="true">4.6.1.</strong> Mosquitto 配置认证</a></li><li class="chapter-item "><a href="../../../projects/mqtt/mqttws.html"><strong aria-hidden="true">4.6.2.</strong> Mosquitto 配置 Websocket</a></li><li class="chapter-item "><a href="../../../projects/mqtt/mosquittogoauth.html"><strong aria-hidden="true">4.6.3.</strong> Mosquitto 配置 Go Auth 插件</a></li><li class="chapter-item "><a href="../../../projects/mqtt/mqttvisit.html"><strong aria-hidden="true">4.6.4.</strong> 使用 MQTT 接收文章审核消息</a></li></ol></li></ol></li><li class="chapter-item "><a href="../../../notes/index.html"><strong aria-hidden="true">5.</strong> 随手笔记</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../notes/wander1.html"><strong aria-hidden="true">5.1.</strong> 豆子工具由来</a></li><li class="chapter-item "><a href="../../../notes/visit1.html"><strong aria-hidden="true">5.2.</strong> 豆子碎片由来</a></li><li class="chapter-item "><a href="../../../notes/visit2.html"><strong aria-hidden="true">5.3.</strong> 豆子碎片项目介绍</a></li><li class="chapter-item "><a href="../../../notes/visit3.html"><strong aria-hidden="true">5.4.</strong> 豆子碎片录入文章</a></li><li class="chapter-item "><a href="../../../notes/rmcode.html"><strong aria-hidden="true">5.5.</strong> 精简代码很痛苦</a></li><li class="chapter-item "><a href="../../../notes/urlredirect.html"><strong aria-hidden="true">5.6.</strong> URL 跳转携带原路径</a></li><li class="chapter-item "><a href="../../../notes/addaudiosupportwav.html"><strong aria-hidden="true">5.7.</strong> 音频格式转换新增支持 WAV</a></li><li class="chapter-item "><a href="../../../notes/fixartcontentnotfound.html"><strong aria-hidden="true">5.8.</strong> 修复文章内容无法显示</a></li><li class="chapter-item "><a href="../../../notes/fixfilecannotremove.html"><strong aria-hidden="true">5.9.</strong> 修复文章文件无法删除</a></li><li class="chapter-item "><a href="../../../notes/fixasterisknotvoice.html"><strong aria-hidden="true">5.10.</strong> 修复 Asterisk 没有声音</a></li><li class="chapter-item "><a href="../../../notes/searchengine.html"><strong aria-hidden="true">5.11.</strong> 豆子笔记搜索对比</a></li><li class="chapter-item "><a href="../../../notes/gitback.html"><strong aria-hidden="true">5.12.</strong> Git 代码备份</a></li><li class="chapter-item "><a href="../../../notes/nginxtimecontrol.html"><strong aria-hidden="true">5.13.</strong> 时间段访问网页</a></li><li class="chapter-item "><a href="../../../notes/addipterritory.html"><strong aria-hidden="true">5.14.</strong> 管理后台登录添加 IP 归属地拦截</a></li><li class="chapter-item "><a href="../../../notes/scriptinteractive.html"><strong aria-hidden="true">5.15.</strong> Linux 脚本自动交互</a></li><li class="chapter-item "><a href="../../../notes/video.html"><strong aria-hidden="true">5.16.</strong> 如何录制视频？</a></li><li class="chapter-item "><a href="../../../notes/upartrs.html"><strong aria-hidden="true">5.17.</strong> 优化文章上传工具 Rust 版本</a></li><li class="chapter-item "><a href="../../../notes/mqtt.html"><strong aria-hidden="true">5.18.</strong> 白话 MQTT 协议</a></li><li class="chapter-item "><a href="../../../notes/sqlite2pg.html"><strong aria-hidden="true">5.19.</strong> Sqlite3 迁移到 Postgresql</a></li><li class="chapter-item "><a href="../../../notes/pjsiprealtime.html"><strong aria-hidden="true">5.20.</strong> Asterisk 配置 ODBC 连接数据库</a></li><li class="chapter-item "><a href="../../../notes/pjsippgsql.html"><strong aria-hidden="true">5.21.</strong> Asterisk 配置 PJSIP 连接 POSTGRESQL 数据库</a></li><li class="chapter-item "><a href="../../../notes/udpprobe.html"><strong aria-hidden="true">5.22.</strong> 探测手机流量 UDP 是否拦截封禁</a></li><li class="chapter-item "><a href="../../../notes/addmermaid.html"><strong aria-hidden="true">5.23.</strong> Mdbook 集成 Mermaid 图表</a></li><li class="chapter-item "><a href="../../../notes/caddy.html"><strong aria-hidden="true">5.24.</strong> 使用 Caddy 部署网站</a></li><li class="chapter-item "><a href="../../../notes/bindmp.html"><strong aria-hidden="true">5.25.</strong> 使用小程序账号绑定客户端</a></li><li class="chapter-item "><a href="../../../notes/twicehttp.html"><strong aria-hidden="true">5.26.</strong> 解决赠送两次豆子点数问题</a></li><li class="chapter-item "><a href="../../../notes/chip.html"><strong aria-hidden="true">5.27.</strong> 芯片发展史</a></li><li class="chapter-item "><a href="../../../notes/computer.html"><strong aria-hidden="true">5.28.</strong> 计算机发展史</a></li><li class="chapter-item "><a href="../../../notes/devarch.html"><strong aria-hidden="true">5.29.</strong> 编程开发架构发展史</a></li><li class="chapter-item "><a href="../../../notes/devlang.html"><strong aria-hidden="true">5.30.</strong> 编程语言发展史</a></li><li class="chapter-item "><a href="../../../notes/virus.html"><strong aria-hidden="true">5.31.</strong> 网络安全发展史</a></li><li class="chapter-item "><a href="../../../notes/wireless.html"><strong aria-hidden="true">5.32.</strong> 无线技术发展史</a></li></ol></li><li class="chapter-item "><a href="../../../oapi/index.html"><strong aria-hidden="true">6.</strong> 开放接口</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../../oapi/visit/index.html"><strong aria-hidden="true">6.1.</strong> Visit</a></li><li class="chapter-item "><a href="../../../oapi/wander/index.html"><strong aria-hidden="true">6.2.</strong> Wander</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">豆子笔记</h1>
+
+                    <div class="right-buttons">
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="前言"><a class="header" href="#前言">前言</a></h2>
+<p>之前就在想，不少教程或示例的代码设计都是一步到位的（也没问题）</p>
+<p>但实际操作的读者真的能够理解透彻为什么吗？左思右想，有了今天这一章的内容，我认为实际经历过一遍印象会更加深刻</p>
+<h2 id="规划"><a class="header" href="#规划">规划</a></h2>
+<p>在本章节，将介绍以下功能的整理：</p>
+<ul>
+<li>抽离、分层业务逻辑：减轻 routers/*.go 内的 api 方法的逻辑（但本文暂不分层 repository，这块逻辑还不重）</li>
+<li>增加容错性：对 gorm 的错误进行判断</li>
+<li>Redis 缓存：对获取数据类的接口增加缓存设置</li>
+<li>减少重复冗余代码</li>
+</ul>
+<h2 id="问题在哪"><a class="header" href="#问题在哪">问题在哪？</a></h2>
+<p>在规划阶段我们发现了一个问题，这是目前的伪代码：</p>
+<pre><code>if ! HasErrors() {
+	if ExistArticleByID(id) {
+		DeleteArticle(id)
+		code = e.SUCCESS
+	} else {
+		code = e.ERROR_NOT_EXIST_ARTICLE
+	}
+} else {
+	for _, err := range valid.Errors {
+		logging.Info(err.Key, err.Message)
+	}
+}
+
+c.JSON(http.StatusOK, gin.H{
+	"code": code,
+	"msg":  e.GetMsg(code),
+	"data": make(map[string]string),
+})
+</code></pre>
+<p>如果加上规划内的功能逻辑呢，伪代码会变成：</p>
+<pre><code>if ! HasErrors() {
+    exists, err := ExistArticleByID(id)
+    if err == nil {
+        if exists {
+    		err = DeleteArticle(id)
+    		if err == nil {
+    		    code = e.SUCCESS
+    		} else {
+    		    code = e.ERROR_XXX
+    		}
+    	} else {
+    		code = e.ERROR_NOT_EXIST_ARTICLE
+    	}
+    } else {
+        code = e.ERROR_XXX
+    }
+} else {
+	for _, err := range valid.Errors {
+		logging.Info(err.Key, err.Message)
+	}
+}
+
+c.JSON(http.StatusOK, gin.H{
+	"code": code,
+	"msg":  e.GetMsg(code),
+	"data": make(map[string]string),
+})
+</code></pre>
+<p>如果缓存的逻辑也加进来，后面慢慢不断的迭代，岂不是会变成如下图一样？</p>
+<p><img src="https://coolshell.cn/wp-content/uploads/2017/04/IMG_7411.jpg" alt="image" /></p>
+<p>现在我们发现了问题，应及时解决这个代码结构问题，同时把代码写的清晰、漂亮、易读易改也是一个重要指标</p>
+<h2 id="如何改"><a class="header" href="#如何改">如何改？</a></h2>
+<p>在左耳朵耗子的文章中，这类代码被称为 “箭头型” 代码，有如下几个问题：</p>
+<p>1、我的显示器不够宽，箭头型代码缩进太狠了，需要我来回拉水平滚动条，这让我在读代码的时候，相当的不舒服</p>
+<p>2、除了宽度外还有长度，有的代码的 if-else 里的 if-else 里的 if-else 的代码太多，读到中间你都不知道中间的代码是经过了什么样的层层检查才来到这里的</p>
+<p>总而言之，“箭头型代码”如果嵌套太多，代码太长的话，会相当容易让维护代码的人（包括自己）迷失在代码中，因为看到最内层的代码时，你已经不知道前面的那一层一层的条件判断是什么样的，代码是怎么运行到这里的，所以，箭头型代码是非常难以维护和 Debug 的。</p>
+<p>简单的来说，就是<strong>让出错的代码先返回，前面把所有的错误判断全判断掉，然后就剩下的就是正常的代码了</strong></p>
+<p>（注意：本段引用自耗子哥的 <a href="https://coolshell.cn/articles/17757.html">如何重构“箭头型”代码</a>，建议细细品尝）</p>
+<h2 id="落实"><a class="header" href="#落实">落实</a></h2>
+<p>本项目将对既有代码进行优化和实现缓存，希望你习得方法并对其他地方也进行优化</p>
+<p>第一步：完成 Redis 的基础设施建设（需要你先装好 Redis）</p>
+<p>第二步：对现有代码进行拆解、分层（不会贴上具体步骤的代码，希望你能够实操一波，加深理解 🤔）</p>
+<h3 id="redis"><a class="header" href="#redis">Redis</a></h3>
+<h4 id="一配置"><a class="header" href="#一配置">一、配置</a></h4>
+<p>打开 conf/app.ini 文件，新增配置：</p>
+<pre><code>...
+[redis]
+Host = 127.0.0.1:6379
+Password =
+MaxIdle = 30
+MaxActive = 30
+IdleTimeout = 200
+</code></pre>
+<h4 id="二缓存-prefix"><a class="header" href="#二缓存-prefix">二、缓存 Prefix</a></h4>
+<p>打开 pkg/e 目录，新建 cache.go，写入内容：</p>
+<pre><code>package e
+
+const (
+	CACHE_ARTICLE = "ARTICLE"
+	CACHE_TAG     = "TAG"
+)
+</code></pre>
+<h4 id="三缓存-key"><a class="header" href="#三缓存-key">三、缓存 Key</a></h4>
+<p>（1）、打开 service 目录，新建 cache_service/article.go</p>
+<p>写入内容：<a href="https://github.com/EDDYCJY/go-gin-example/blob/master/service/cache_service/article.go">传送门</a></p>
+<p>（2）、打开 service 目录，新建 cache_service/tag.go</p>
+<p>写入内容：<a href="https://github.com/EDDYCJY/go-gin-example/blob/master/service/cache_service/tag.go">传送门</a></p>
+<p>这一部分主要是编写获取缓存 KEY 的方法，直接参考传送门即可</p>
+<h4 id="四redis-工具包"><a class="header" href="#四redis-工具包">四、Redis 工具包</a></h4>
+<p>打开 pkg 目录，新建 gredis/redis.go，写入内容：</p>
+<pre><code>package gredis
+
+import (
+	"encoding/json"
+	"time"
+
+	"github.com/gomodule/redigo/redis"
+
+	"github.com/EDDYCJY/go-gin-example/pkg/setting"
+)
+
+var RedisConn *redis.Pool
+
+func Setup() error {
+	RedisConn = &amp;redis.Pool{
+		MaxIdle:     setting.RedisSetting.MaxIdle,
+		MaxActive:   setting.RedisSetting.MaxActive,
+		IdleTimeout: setting.RedisSetting.IdleTimeout,
+		Dial: func() (redis.Conn, error) {
+			c, err := redis.Dial("tcp", setting.RedisSetting.Host)
+			if err != nil {
+				return nil, err
+			}
+			if setting.RedisSetting.Password != "" {
+				if _, err := c.Do("AUTH", setting.RedisSetting.Password); err != nil {
+					c.Close()
+					return nil, err
+				}
+			}
+			return c, err
+		},
+		TestOnBorrow: func(c redis.Conn, t time.Time) error {
+			_, err := c.Do("PING")
+			return err
+		},
+	}
+
+	return nil
+}
+
+func Set(key string, data interface{}, time int) error {
+	conn := RedisConn.Get()
+	defer conn.Close()
+
+	value, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	_, err = conn.Do("SET", key, value)
+	if err != nil {
+		return err
+	}
+
+	_, err = conn.Do("EXPIRE", key, time)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Exists(key string) bool {
+	conn := RedisConn.Get()
+	defer conn.Close()
+
+	exists, err := redis.Bool(conn.Do("EXISTS", key))
+	if err != nil {
+		return false
+	}
+
+	return exists
+}
+
+func Get(key string) ([]byte, error) {
+	conn := RedisConn.Get()
+	defer conn.Close()
+
+	reply, err := redis.Bytes(conn.Do("GET", key))
+	if err != nil {
+		return nil, err
+	}
+
+	return reply, nil
+}
+
+func Delete(key string) (bool, error) {
+	conn := RedisConn.Get()
+	defer conn.Close()
+
+	return redis.Bool(conn.Do("DEL", key))
+}
+
+func LikeDeletes(key string) error {
+	conn := RedisConn.Get()
+	defer conn.Close()
+
+	keys, err := redis.Strings(conn.Do("KEYS", "*"+key+"*"))
+	if err != nil {
+		return err
+	}
+
+	for _, key := range keys {
+		_, err = Delete(key)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+</code></pre>
+<p>在这里我们做了一些基础功能封装</p>
+<p>1、设置 RedisConn 为 redis.Pool（连接池）并配置了它的一些参数：</p>
+<ul>
+<li>
+<p>Dial：提供创建和配置应用程序连接的一个函数</p>
+</li>
+<li>
+<p>TestOnBorrow：可选的应用程序检查健康功能</p>
+</li>
+<li>
+<p>MaxIdle：最大空闲连接数</p>
+</li>
+<li>
+<p>MaxActive：在给定时间内，允许分配的最大连接数（当为零时，没有限制）</p>
+</li>
+<li>
+<p>IdleTimeout：在给定时间内将会保持空闲状态，若到达时间限制则关闭连接（当为零时，没有限制）</p>
+</li>
+</ul>
+<p>2、封装基础方法</p>
+<p>文件内包含 Set、Exists、Get、Delete、LikeDeletes 用于支撑目前的业务逻辑，而在里面涉及到了如方法：</p>
+<p>（1）<code>RedisConn.Get()</code>：在连接池中获取一个活跃连接</p>
+<p>（2）<code>conn.Do(commandName string, args ...interface{})</code>：向 Redis 服务器发送命令并返回收到的答复</p>
+<p>（3）<code>redis.Bool(reply interface{}, err error)</code>：将命令返回转为布尔值</p>
+<p>（4）<code>redis.Bytes(reply interface{}, err error)</code>：将命令返回转为 Bytes</p>
+<p>（5）<code>redis.Strings(reply interface{}, err error)</code>：将命令返回转为 []string</p>
+<p>在 <a href="https://godoc.org/github.com/gomodule/redigo/redis">redigo</a> 中包含大量类似的方法，万变不离其宗，建议熟悉其使用规则和 <a href="http://doc.redisfans.com/index.html">Redis 命令</a> 即可</p>
+<p>到这里为止，Redis 就可以愉快的调用啦。另外受篇幅限制，这块的深入讲解会另外开设！</p>
+<h3 id="拆解分层"><a class="header" href="#拆解分层">拆解、分层</a></h3>
+<p>在先前规划中，引出几个方法去优化我们的应用结构</p>
+<ul>
+<li>错误提前返回</li>
+<li>统一返回方法</li>
+<li>抽离 Service，减轻 routers/api 的逻辑，进行分层</li>
+<li>增加 gorm 错误判断，让错误提示更明确（增加内部错误码）</li>
+</ul>
+<h4 id="编写返回方法"><a class="header" href="#编写返回方法">编写返回方法</a></h4>
+<p>要让错误提前返回，c.JSON 的侵入是不可避免的，但是可以让其更具可变性，指不定哪天就变 XML 了呢？</p>
+<p>1、打开 pkg 目录，新建 app/request.go，写入文件内容：</p>
+<pre><code>package app
+
+import (
+	"github.com/astaxie/beego/validation"
+
+	"github.com/EDDYCJY/go-gin-example/pkg/logging"
+)
+
+func MarkErrors(errors []*validation.Error) {
+	for _, err := range errors {
+		logging.Info(err.Key, err.Message)
+	}
+
+	return
+}
+</code></pre>
+<p>2、打开 pkg 目录，新建 app/response.go，写入文件内容：</p>
+<pre><code>package app
+
+import (
+	"github.com/gin-gonic/gin"
+
+	"github.com/EDDYCJY/go-gin-example/pkg/e"
+)
+
+type Gin struct {
+	C *gin.Context
+}
+
+func (g *Gin) Response(httpCode, errCode int, data interface{}) {
+	g.C.JSON(httpCode, gin.H{
+		"code": httpCode,
+		"msg":  e.GetMsg(errCode),
+		"data": data,
+	})
+
+	return
+}
+</code></pre>
+<p>这样子以后如果要变动，直接改动 app 包内的方法即可</p>
+<h4 id="修改既有逻辑"><a class="header" href="#修改既有逻辑">修改既有逻辑</a></h4>
+<p>打开 routers/api/v1/article.go，查看修改 GetArticle 方法后的代码为：</p>
+<pre><code class="language-go">func GetArticle(c *gin.Context) {
+	appG := app.Gin{c}
+	id := com.StrTo(c.Param("id")).MustInt()
+	valid := validation.Validation{}
+	valid.Min(id, 1, "id").Message("ID必须大于0")
+
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.INVALID_PARAMS, nil)
+		return
+	}
+
+	articleService := article_service.Article{ID: id}
+	exists, err := articleService.ExistByID()
+	if err != nil {
+		appG.Response(http.StatusOK, e.ERROR_CHECK_EXIST_ARTICLE_FAIL, nil)
+		return
+	}
+	if !exists {
+		appG.Response(http.StatusOK, e.ERROR_NOT_EXIST_ARTICLE, nil)
+		return
+	}
+
+	article, err := articleService.Get()
+	if err != nil {
+		appG.Response(http.StatusOK, e.ERROR_GET_ARTICLE_FAIL, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.SUCCESS, article)
+}
+</code></pre>
+<p>这里有几个值得变动点，主要是在内部增加了错误返回，如果存在错误则直接返回。另外进行了分层，业务逻辑内聚到了 service 层中去，而 routers/api（controller）显著减轻，代码会更加的直观</p>
+<p>例如 service/article_service 下的 <code>articleService.Get()</code> 方法：</p>
+<pre><code>func (a *Article) Get() (*models.Article, error) {
+	var cacheArticle *models.Article
+
+	cache := cache_service.Article{ID: a.ID}
+	key := cache.GetArticleKey()
+	if gredis.Exists(key) {
+		data, err := gredis.Get(key)
+		if err != nil {
+			logging.Info(err)
+		} else {
+			json.Unmarshal(data, &amp;cacheArticle)
+			return cacheArticle, nil
+		}
+	}
+
+	article, err := models.GetArticle(a.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	gredis.Set(key, article, 3600)
+	return article, nil
+}
+</code></pre>
+<p>而对于 gorm 的 错误返回设置，只需要修改 models/article.go 如下:</p>
+<pre><code>func GetArticle(id int) (*Article, error) {
+	var article Article
+	err := db.Where("id = ? AND deleted_on = ? ", id, 0).First(&amp;article).Related(&amp;article.Tag).Error
+	if err != nil &amp;&amp; err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	return &amp;article, nil
+}
+</code></pre>
+<p>习惯性增加 .Error，把控绝大部分的错误。另外需要注意一点，在 gorm 中，查找不到记录也算一种 “错误” 哦</p>
+<h2 id="最后"><a class="header" href="#最后">最后</a></h2>
+<p>显然，本章节并不是你跟着我敲系列。我给你的课题是 “实现 Redis 缓存并优化既有的业务逻辑代码”</p>
+<p>让其能够不断地适应业务的发展，让代码更清晰易读，且呈层级和结构性</p>
+<p>如果有疑惑，可以到 <a href="https://github.com/EDDYCJY/go-gin-example">go-gin-example</a> 看看我是怎么写的，你是怎么写的，又分别有什么优势、劣势，取长补短一波？</p>
+<h2 id="参考"><a class="header" href="#参考">参考</a></h2>
+<h3 id="本系列示例代码"><a class="header" href="#本系列示例代码">本系列示例代码</a></h3>
+<ul>
+<li><a href="https://github.com/EDDYCJY/go-gin-example">go-gin-example</a></li>
+</ul>
+<h3 id="推荐阅读"><a class="header" href="#推荐阅读">推荐阅读</a></h3>
+<ul>
+<li><a href="https://coolshell.cn/articles/17757.html">如何重构“箭头型”代码</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../../web/docs/gin/gin-12.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../../web/docs/gin/gin-14.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../../web/docs/gin/gin-12.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../../web/docs/gin/gin-14.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../../elasticlunr.min.js"></script>
+        <script src="../../../mark.min.js"></script>
+        <script src="../../../searcher.js"></script>
+
+        <script src="../../../clipboard.min.js"></script>
+        <script src="../../../highlight.js"></script>
+        <script src="../../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
