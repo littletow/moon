@@ -14,13 +14,6 @@
     "label": "mp"
   },
   {
-    "id": "visit.html",
-    "name": "HTML网页示例",
-    "kw": "html，网页，webview",
-    "category": "projects",
-    "label": "html"
-  },
-  {
     "id": "https://mp.weixin.qq.com/s/JaH2zh0so9sOTJ9IXE8qRQ",
     "name": "公众号关联小程序入口",
     "kw": "公众号，小程序",
@@ -110,6 +103,97 @@
     "kw": "教程，小程序",
     "category": "projects",
     "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/WCTr5nvF_FdR48-gpZK1OA",
+    "name": "系列·小程序本地文件系统（八）",
+    "kw": "教程，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/qvcxL3MoUBLiBFmEcDkHTA",
+    "name": "系列·小程序集成广告（九）",
+    "kw": "教程，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/FP9dkCy_Ri6XQKOcKmv_GA",
+    "name": "系列·小程序实现自动更新（十）",
+    "kw": "教程，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/BXsbAvwrFrzpVNk6xlcpAA",
+    "name": "系列·小程序错误信息上报功能（十一）",
+    "kw": "教程，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/AoEQhZbZYdIshw3DIXjulQ",
+    "name": "系列·小程序网络请求兜底服务功能（十二）",
+    "kw": "教程，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/Y-21h5NRk-RtZ0eaoeJ6Ig",
+    "name": "如何使用微信小程序服务通知？",
+    "kw": "服务通知，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/OeY5nYFnrG_rXi7QFUnSDg",
+    "name": "推荐一款可反编译微信小程序的工具",
+    "kw": "编译，工具，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/6s1QYesErXnj3GZn1o6rRQ",
+    "name": "微信小程序中如何查看分享文件",
+    "kw": "查看文件，分享文件，文件，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/37WQa7uwDpvXLTi8lig06A",
+    "name": "小程序九宫格大转盘核心源码",
+    "kw": "画布，九宫格，大转盘，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/MCe8nJIOyAsCq2P7jDL6Qg",
+    "name": "UDP分块传输文件Golang版本",
+    "kw": "UDP，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/6OPHxlqZ6k86BYPV0DBAHw",
+    "name": "自行实现一套IP归属地查询服务",
+    "kw": "IP归属地，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "https://mp.weixin.qq.com/s/7RT8Zp-3HqaR43GBbRXVRQ",
+    "name": "如何在微信小程序中接入MQTT",
+    "kw": "MQTT，小程序",
+    "category": "projects",
+    "label": "gzh"
+  },
+  {
+    "id": "visit.html",
+    "name": "HTML网页示例",
+    "kw": "html，网页，webview",
+    "category": "projects",
+    "label": "html"
   },
   {
     "id": "feelings-1.md",
