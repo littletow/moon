@@ -1,5 +1,290 @@
 [
   {
+    "id": "sqlite3.md",
+    "name": "Sqlite3",
+    "kw": "sqlite3,sqlite",
+    "category": "databases",
+    "label": "md"
+  },
+  {
+    "id": "mongodb.md",
+    "name": "Mongodb",
+    "kw": "mongo,mongodb",
+    "category": "databases",
+    "label": "md"
+  },
+  {
+    "id": "mysql.md",
+    "name": "Mysql",
+    "kw": "mysql",
+    "category": "databases",
+    "label": "md"
+  },
+  {
+    "id": "postgresql.md",
+    "name": "Postgresql",
+    "kw": "pg,postgresql",
+    "category": "databases",
+    "label": "md"
+  },
+  {
+    "id": "oracle.md",
+    "name": "Oracle",
+    "kw": "oracle",
+    "category": "databases",
+    "label": "md"
+  },
+  {
+    "id": "sqlserver.md",
+    "name": "Sqlserver",
+    "kw": "sqlserver",
+    "category": "databases",
+    "label": "md"
+  },
+
+  {
+    "id": "awk.md",
+    "name": "Awk",
+    "kw": "awk",
+    "category": "environments",
+    "label": "md"
+  },
+  {
+    "id": "docker.md",
+    "name": "Docker",
+    "kw": "docker",
+    "category": "environments",
+    "label": "md"
+  },
+  {
+    "id": "firewall.md",
+    "name": "Firewall",
+    "kw": "firewall",
+    "category": "environments",
+    "label": "md"
+  },
+  {
+    "id": "git.md",
+    "name": "Git",
+    "kw": "git",
+    "category": "environments",
+    "label": "md"
+  },
+  {
+    "id": "iperf3.md",
+    "name": "Iperf3",
+    "kw": "net",
+    "category": "environments",
+    "label": "md"
+  },
+   {
+    "id": "netstat.md",
+    "name": "Netstat",
+    "kw": "net",
+    "category": "environments",
+    "label": "md"
+  },
+   {
+    "id": "rsync.md",
+    "name": "Rsync",
+    "kw": "cp",
+    "category": "environments",
+    "label": "md"
+  },
+   {
+    "id": "scp.md",
+    "name": "Scp",
+    "kw": "cp",
+    "category": "environments",
+    "label": "md"
+  },
+  {
+    "id": "sed.md",
+    "name": "Sed",
+    "kw": "sed",
+    "category": "environments",
+    "label": "md"
+  },
+  {
+    "id": "seelog.md",
+    "name": "Log",
+    "kw": "log",
+    "category": "environments",
+    "label": "md"
+  },
+  {
+    "id": "setip.md",
+    "name": "IPconfig",
+    "kw": "ip",
+    "category": "environments",
+    "label": "md"
+  },
+  {
+    "id": "vim.md",
+    "name": "Vim (上)",
+    "kw": "viim",
+    "category": "environments",
+    "label": "md"
+  },
+  {
+    "id": "vim2.md",
+    "name": "Vim (下)",
+    "kw": "vim",
+    "category": "environments",
+    "label": "md"
+  },
+  {
+    "id": "wsl.md",
+    "name": "Wsl",
+    "kw": "wsl",
+    "category": "environments",
+    "label": "md"
+  },
+  {
+    "id": "feelings-1.md",
+    "name": "聊聊工匠情怀-我只是认真",
+    "kw": "",
+    "category": "feelings",
+    "label": "md"
+  },
+  {
+    "id": "feelings-2.md",
+    "name": "别让自己“墙”了自己",
+    "kw": "",
+    "category": "feelings",
+    "label": "md"
+  },
+  {
+    "id": "feelings-3.md",
+    "name": "程序员如何把控自己的职业",
+    "kw": "",
+    "category": "feelings",
+    "label": "md"
+  },
+  {
+    "id": "feelings-4.md",
+    "name": "谈谈我的“三观”",
+    "kw": "",
+    "category": "feelings",
+    "label": "md"
+  },
+
+  {
+    "id": "markdown.md",
+    "name": "Markdown 语法教程",
+    "kw": "",
+    "category": "languages",
+    "label": "md"
+  },
+  {
+    "id": "bash.md",
+    "name": "Bash 脚本",
+    "kw": "",
+    "category": "languages",
+    "label": "md"
+  },
+  {
+    "id": "bat.md",
+    "name": "Bat 脚本",
+    "kw": "",
+    "category": "languages",
+    "label": "md"
+  },
+  {
+    "id": "go.md",
+    "name": "Golang 语言",
+    "kw": "",
+    "category": "languages",
+    "label": "md"
+  },
+  {
+    "id": "rust.md",
+    "name": "Rust 语言",
+    "kw": "",
+    "category": "languages",
+    "label": "md"
+  },
+  {
+    "id": "miniapp.md",
+    "name": "微信小程序",
+    "kw": "",
+    "category": "languages",
+    "label": "md"
+  },
+  {
+    "id": "freepascal.md",
+    "name": "Free Pascal 语言",
+    "kw": "",
+    "category": "languages",
+    "label": "md"
+  },
+  {
+    "id": "c.md",
+    "name": "C 语言",
+    "kw": "",
+    "category": "languages",
+    "label": "md"
+  },
+
+  {
+    "id": "gostd.md",
+    "name": "Golang 标准库",
+    "kw": "",
+    "category": "libs",
+    "label": "md"
+  },
+  {
+    "id": "golib.md",
+    "name": "Golang 常用库",
+    "kw": "",
+    "category": "libs",
+    "label": "md"
+  },
+  {
+    "id": "rust.md",
+    "name": "Rust 常用库",
+    "kw": "",
+    "category": "libs",
+    "label": "md"
+  },
+  {
+    "id": "cryptogram.md",
+    "name": "加密算法",
+    "kw": "",
+    "category": "libs",
+    "label": "md"
+  },
+
+  {
+    "id": "redis.md",
+    "name": "Redis 常用命令",
+    "kw": "",
+    "category": "middlewares",
+    "label": "md"
+  },
+  {
+    "id": "caddy.md",
+    "name": "Caddy",
+    "kw": "",
+    "category": "middlewares",
+    "label": "md"
+  },
+  {
+    "id": "nginx.md",
+    "name": "Nginx",
+    "kw": "",
+    "category": "middlewares",
+    "label": "md"
+  },
+  {
+    "id": "minio.md",
+    "name": "Minio",
+    "kw": "",
+    "category": "middlewares",
+    "label": "md"
+  },
+
+  {
     "id": "visit.md",
     "name": "豆子碎片项目介绍",
     "kw": "豆子碎片，visit，小程序",
@@ -195,34 +480,7 @@
     "category": "projects",
     "label": "html"
   },
-  {
-    "id": "feelings-1.md",
-    "name": "聊聊工匠情怀-我只是认真",
-    "kw": "",
-    "category": "feelings",
-    "label": "md"
-  },
-  {
-    "id": "feelings-2.md",
-    "name": "别让自己“墙”了自己",
-    "kw": "",
-    "category": "feelings",
-    "label": "md"
-  },
-  {
-    "id": "feelings-3.md",
-    "name": "程序员如何把控自己的职业",
-    "kw": "",
-    "category": "feelings",
-    "label": "md"
-  },
-  {
-    "id": "feelings-4.md",
-    "name": "谈谈我的“三观”",
-    "kw": "",
-    "category": "feelings",
-    "label": "md"
-  },
+  
   {
     "id": "mqtt.md",
     "name": "MQTT 轻量消息传输协议",
@@ -272,170 +530,102 @@
     "category": "protocols",
     "label": "md"
   },
+ 
   {
-    "id": "markdown.md",
-    "name": "Markdown 语法教程",
-    "kw": "",
-    "category": "languages",
+    "id": "techsrc.md",
+    "name": "技术源泉公众号介绍",
+    "kw": "公众号",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "bash.md",
-    "name": "Bash 脚本",
-    "kw": "",
-    "category": "languages",
+    "id": "visit1.md",
+    "name": "豆子碎片小程序优化建议",
+    "kw": "小程序",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "bat.md",
-    "name": "Bat 脚本",
-    "kw": "",
-    "category": "languages",
+    "id": "mpfile.md",
+    "name": "小程序文件存储介绍",
+    "kw": "小程序，文件存储",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "go.md",
-    "name": "Golang 语言",
-    "kw": "",
-    "category": "languages",
+    "id": "mpcache.md",
+    "name": "小程序数据缓存介绍",
+    "kw": "小程序，数据缓存",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "rust.md",
-    "name": "Rust 语言",
-    "kw": "",
-    "category": "languages",
+    "id": "mpopendoc.md",
+    "name": "小程序打开文档介绍",
+    "kw": "小程序，打开文档",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "miniapp.md",
-    "name": "微信小程序",
-    "kw": "",
-    "category": "languages",
+    "id": "adrewardedvideo.md",
+    "name": "小程序集成激励视频广告",
+    "kw": "小程序，激励视频广告",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "freepascal.md",
-    "name": "Free Pascal 语言",
-    "kw": "",
-    "category": "languages",
+    "id": "adinterstitial.md",
+    "name": "小程序集成插屏广告",
+    "kw": "小程序，插屏广告",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "c.md",
-    "name": "C 语言",
-    "kw": "",
-    "category": "languages",
+    "id": "adtemplate.md",
+    "name": "小程序集成原生模板广告",
+    "kw": "小程序，模板广告",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "redis.md",
-    "name": "Redis 常用命令",
-    "kw": "",
-    "category": "databases",
+    "id": "mpbattery.md",
+    "name": "小程序中使用电量",
+    "kw": "小程序，电量",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "sqlite3.md",
-    "name": "Sqlite3",
-    "kw": "",
-    "category": "databases",
+    "id": "mpbluetooth.md",
+    "name": "小程序中使用蓝牙",
+    "kw": "小程序，蓝牙",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "mongodb.md",
-    "name": "Mongodb",
-    "kw": "",
-    "category": "databases",
+    "id": "mpwifi.md",
+    "name": "小程序中使用WIFI",
+    "kw": "小程序，WIFI",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "mysql.md",
-    "name": "Mysql",
-    "kw": "",
-    "category": "databases",
+    "id": "mpvibrate.md",
+    "name": "小程序中使用振动",
+    "kw": "小程序，振动",
+    "category": "techsrcs",
     "label": "md"
   },
   {
-    "id": "postgresql.md",
-    "name": "Postgresql",
-    "kw": "",
-    "category": "databases",
+    "id": "mpscancode.md",
+    "name": "小程序中使用扫码",
+    "kw": "小程序，扫码",
+    "category": "techsrcs",
     "label": "md"
   },
-  {
-    "id": "oracle.md",
-    "name": "Oracle",
-    "kw": "",
-    "category": "databases",
-    "label": "md"
-  },
-  {
-    "id": "sqlserver.md",
-    "name": "Sqlserver",
-    "kw": "",
-    "category": "databases",
-    "label": "md"
-  },
-  {
-    "id": "minio.md",
-    "name": "Minio",
-    "kw": "",
-    "category": "databases",
-    "label": "md"
-  },
-  {
-    "id": "gostd.md",
-    "name": "Golang 标准库",
-    "kw": "",
-    "category": "libs",
-    "label": "md"
-  },
-  {
-    "id": "golib.md",
-    "name": "Golang 常用库",
-    "kw": "",
-    "category": "libs",
-    "label": "md"
-  },
-  {
-    "id": "rust.md",
-    "name": "Rust 常用库",
-    "kw": "",
-    "category": "libs",
-    "label": "md"
-  },
-  {
-    "id": "cryptogram.md",
-    "name": "加密算法",
-    "kw": "",
-    "category": "libs",
-    "label": "md"
-  },
+ 
   {
     "id": "asterisk.md",
     "name": "Asterisk",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "awk.md",
-    "name": "Awk",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "caddy.md",
-    "name": "Caddy",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "docker.md",
-    "name": "Docker",
     "kw": "",
     "category": "tools",
     "label": "md"
@@ -448,13 +638,6 @@
     "label": "md"
   },
   {
-    "id": "firewall.md",
-    "name": "Firewall",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
     "id": "frp.md",
     "name": "Frp",
     "kw": "",
@@ -462,22 +645,8 @@
     "label": "md"
   },
   {
-    "id": "git.md",
-    "name": "Git",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
     "id": "hugo.md",
     "name": "Hugo",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "iperf3.md",
-    "name": "Iperf3",
     "kw": "",
     "category": "tools",
     "label": "md"
@@ -497,78 +666,8 @@
     "label": "md"
   },
   {
-    "id": "netstat.md",
-    "name": "Netstat",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "nginx.md",
-    "name": "Nginx",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "rsync.md",
-    "name": "Rsync",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
     "id": "rustdesk.md",
     "name": "Rustdesk",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "scp.md",
-    "name": "Scp",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "sed.md",
-    "name": "Sed",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "seelog.md",
-    "name": "Log",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "setip.md",
-    "name": "IPconfig",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "vim.md",
-    "name": "Vim (上)",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "vim2.md",
-    "name": "Vim (下)",
-    "kw": "",
-    "category": "tools",
-    "label": "md"
-  },
-  {
-    "id": "wsl.md",
-    "name": "Wsl",
     "kw": "",
     "category": "tools",
     "label": "md"
