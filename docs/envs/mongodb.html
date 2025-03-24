@@ -203,6 +203,7 @@ db.dropDatabase();
 </code></pre>
 <p>删除 id 为 4f29e4860b2e2ecb9910e304 的数据,操作</p>
 <pre><code>db.logs.remove({'_id':ObjectId('4f29e4860b2e2ecb9910e304')})
+db.logs.deleteOne({'_id':ObjectId('4f29e4860b2e2ecb9910e304')})
 </code></pre>
 <p>查询文档记录</p>
 <pre><code>db.logs.find({'adId':'887760470'})
