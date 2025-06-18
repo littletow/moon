@@ -335,6 +335,12 @@ alter table 表名 alter 字段名 type 新字段类型;
 <h2 id="删除字段"><a class="header" href="#删除字段">删除字段</a></h2>
 <pre><code>alter table 表名 drop 字段名;
 </code></pre>
+<h2 id="清空表和主键自增从1开始"><a class="header" href="#清空表和主键自增从1开始">清空表和主键自增从1开始</a></h2>
+<pre><code>// 清空表数据
+TRUNCATE table ;
+// 清空表数据，自增从1开始
+TRUNCATE table RESTART IDENTITY;
+</code></pre>
 <h2 id="使脚本在事务中运行"><a class="header" href="#使脚本在事务中运行">使脚本在事务中运行</a></h2>
 <pre><code>psql -l -f myscript.sql
 psql --single-transaction -f myscript.sql

@@ -214,8 +214,12 @@ db.logs.deleteOne({'_id':ObjectId('4f29e4860b2e2ecb9910e304')})
 <p>清空 logs 表记录</p>
 <pre><code>db.logs.deleteMany({})
 </code></pre>
-<p>修改 logs 表记录</p>
+<p>修改 logs 表记录(放弃)</p>
 <pre><code>db.logs.update({userId:{$in:[id1,id2]}},{$set:{'sex':1}},{multi:true});
+</code></pre>
+<p>修改logs 表记录（推荐）</p>
+<pre><code>db.logs.updateOne({userId:id1},{$set:{'sex':1}})
+db.logs.updateMany({userId:{$in:[id1,id2]}},{$set:{'sex':1}})
 </code></pre>
 
                     </main>
